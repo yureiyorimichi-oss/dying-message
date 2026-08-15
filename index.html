@@ -216,16 +216,16 @@
   <script src="Build/BuildOutput.loader.js"></script>
   <script>
     createUnityInstance(document.querySelector("#unity-canvas"), {
-      dataUrl: "Build/BuildOutput.data.gz",             // ← データは .gz
-      frameworkUrl: "Build/BuildOutput.framework.js",  // ★ ここだけ .gz を消す！
-      codeUrl: "Build/BuildOutput.wasm.gz",             // ← WASMは .gz
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "DyingMessage",
-      productVersion: "1.0",
-    }).catch((message) => {
-      alert(message);
-    });
+  dataUrl: "Build/BuildOutput.data.unityweb",        // ★ .unityweb を付ける
+  frameworkUrl: "Build/BuildOutput.framework.js",    // ※ そのまま
+  codeUrl: "Build/BuildOutput.wasm.unityweb",        // ★ .unityweb を付ける
+  streamingAssetsUrl: "StreamingAssets",
+  companyName: "DefaultCompany",
+  productName: "DyingMessage",
+  productVersion: "1.0",
+}).catch((message) => {
+  alert(message);
+});
 
     // モーダル操作用JavaScript
     function openTerms() {
