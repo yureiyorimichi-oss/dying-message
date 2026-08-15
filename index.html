@@ -216,9 +216,9 @@
   <script src="Build/BuildOutput.loader.js"></script>
   <script>
     createUnityInstance(document.querySelector("#unity-canvas"), {
-  dataUrl: "Build/BuildOutput.data",       // ← .gz は書かない
-  frameworkUrl: "Build/BuildOutput.framework.js",
-  codeUrl: "Build/BuildOutput.wasm",       // ← ★ .gz を消して .wasm にする！
+  dataUrl: "Build/BuildOutput.data.gz",          // ← .gz を付ける
+  frameworkUrl: "Build/BuildOutput.framework.js.gz", // ← .gz を付ける
+  codeUrl: "Build/BuildOutput.wasm.gz",          // ← .gz を付ける
   streamingAssetsUrl: "StreamingAssets",
   companyName: "DefaultCompany",
   productName: "DyingMessage",
