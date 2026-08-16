@@ -275,8 +275,15 @@
 
     // Unityから呼び出せるようにグローバル(window)に関数を登録
     window.openShareModal = function(base64Image) {
-      // 1. Unity(WebGL)からのポインタを正しい文字列に変換
-      const imageSrc = (typeof UTF8ToString === 'function') ? UTF8ToString(base64Image) : base64Image;
+      // 1. 数値（ポインタ）で届いた場合は文字列に変換
+      let imageSrc = base64Image;
+      if (typeof base64Image === 'number') {
+        if (typeof UTF8ToString === 'function') {
+          imageSrc = UTF8ToString(base64Image);
+        } else if (typeof Module !== 'undefined' && typeof Module.UTF8ToString === 'function') {
+          imageSrc = Module.UTF8ToString(base64Image);
+        }
+      }
 
       // 2. <img>タグに画像データをセット
       const imgElement = document.getElementById('share-img-preview');
