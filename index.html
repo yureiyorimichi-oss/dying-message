@@ -255,24 +255,25 @@
 
     // Unityから呼び出せるようにグローバル(window)に関数を登録
     window.openShareModal = function(base64Image) {
+      console.log("【デバッグ】受け取ったデータ型:", typeof base64Image);
+      console.log("【デバッグ】受け取ったデータ先頭:", base64Image ? String(base64Image).substring(0, 50) : base64Image);
+
       let imageSrc = base64Image;
 
-      // 数値（メモリポインタ）で渡ってきた場合、Unityメモリから文字列へ変換
+      // 数値（ポインタ）で渡ってきた場合の変換処理
       if (typeof base64Image === 'number') {
-        if (unityGame && unityGame.Module && typeof unityGame.Module.UTF8ToString === 'function') {
-          imageSrc = unityGame.Module.UTF8ToString(base64Image);
-        } else if (typeof UTF8ToString === 'function') {
+        if (typeof UTF8ToString === 'function') {
           imageSrc = UTF8ToString(base64Image);
+        } else if (typeof Module !== 'undefined' && typeof Module.UTF8ToString === 'function') {
+          imageSrc = Module.UTF8ToString(base64Image);
         }
       }
 
-      // <img>タグに画像（Base64）をセット
       const imgElement = document.getElementById('share-img-preview');
       if (imgElement) {
         imgElement.src = imageSrc;
       }
 
-      // Xシェア用リンクを作成
       const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
       const shareUrl = encodeURIComponent(window.location.href);
       const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
@@ -282,7 +283,6 @@
         xShareLink.href = xUrl;
       }
 
-      // モーダルを表示
       const shareModal = document.getElementById('share-modal');
       if (shareModal) {
         shareModal.style.display = 'flex';
