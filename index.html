@@ -100,7 +100,7 @@
       cursor: pointer;
     }
 
-    /* 4. 利用規約ポップアップ（モーダル） */
+    /* 4. ポップアップ（モーダル共通） */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -153,26 +153,27 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    /* シェア用モーダル */
-#share-img-preview {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  border-radius: 8px;
-  margin: 15px 0;
-  border: 1px solid #444;
-}
-.x-share-btn {
-  display: inline-block;
-  background-color: #000000;
-  color: #ffffff;
-  border: 1px solid #333;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-weight: bold;
-  text-decoration: none;
-  margin-top: 10px;
-}
+
+    /* シェア用モーダル独自スタイル */
+    #share-img-preview {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 8px;
+      margin: 15px 0;
+      border: 1px solid #444;
+    }
+    .x-share-btn {
+      display: inline-block;
+      background-color: #000000;
+      color: #ffffff;
+      border: 1px solid #333;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -197,8 +198,6 @@
 
     <!-- 下部固定広告スペース -->
     <div id="ad-sticky-footer">
-      <!-- Google AdSense コード枠（審査通過後に挿入） -->
-      <!-- <ins class="adsbygoogle" ...></ins> -->
       <span style="font-size: 10px; color: #555;">スポンサーリンク</span>
     </div>
   </div>
@@ -232,20 +231,40 @@
     </div>
   </div>
 
+  <!-- シェア用モーダル -->
+  <div id="share-modal" class="modal-overlay">
+    <div class="modal-content" style="text-align: center;">
+      <h2>画像を保存してシェア</h2>
+      <p style="font-size: 0.8rem; color: #aaa; margin-top: 8px;">
+        画像を長押し（または右クリック）して保存してください。
+      </p>
+      
+      <img id="share-img-preview" src="" alt="生成画像">
+
+      <br>
+      <a id="x-share-link" class="x-share-btn" href="#" target="_blank" rel="noopener noreferrer">
+        𝕏 でポストする
+      </a>
+
+      <button class="close-btn" onclick="closeShareModal()">閉じる</button>
+    </div>
+  </div>
+
   <!-- Unity WebGL Loader Script -->
   <script src="Build/BuildOutput.loader.js"></script>
   <script>
     createUnityInstance(document.querySelector("#unity-canvas"), {
-  dataUrl: "Build/BuildOutput.data.unityweb",        // ★ .unityweb を付ける
-  frameworkUrl: "Build/BuildOutput.framework.js",    // ※ そのまま
-  codeUrl: "Build/BuildOutput.wasm.unityweb",        // ★ .unityweb を付ける
-  streamingAssetsUrl: "StreamingAssets",
-  companyName: "DefaultCompany",
-  productName: "DyingMessage",
-  productVersion: "1.0",
-}).catch((message) => {
-  alert(message);
-});
+      dataUrl: "Build/BuildOutput.data.unityweb",
+      frameworkUrl: "Build/BuildOutput.framework.js",
+      codeUrl: "Build/BuildOutput.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "DyingMessage",
+      productVersion: "1.0",
+    }).catch((message) => {
+      alert(message);
+    });
+
     // モーダル操作用JavaScript
     function openTerms() {
       document.getElementById('terms-modal').style.display = 'flex';
@@ -253,45 +272,23 @@
     function closeTerms() {
       document.getElementById('terms-modal').style.display = 'none';
     }
-    // Unityから画像をBase64形式で受け取ってモーダルを開く関数
-function openShareModal(base64Image) {
-  // 画像のセット
-  const imgElement = document.getElementById('share-img-preview');
-  imgElement.src = base64Image;
 
-  // X（Twitter）のシェアURL設定
-  const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
-  const shareUrl = encodeURIComponent(window.location.href);
-  const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
-  
-  document.getElementById('x-share-link').href = xUrl;
+    // Unityから呼び出せるようにグローバル(window)に関数を登録
+    window.openShareModal = function(base64Image) {
+      const imgElement = document.getElementById('share-img-preview');
+      imgElement.src = base64Image;
 
-  // モーダル表示
-  document.getElementById('share-modal').style.display = 'flex';
-}
+      const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
+      const shareUrl = encodeURIComponent(window.location.href);
+      const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
+      
+      document.getElementById('x-share-link').href = xUrl;
+      document.getElementById('share-modal').style.display = 'flex';
+    };
 
-function closeShareModal() {
-  document.getElementById('share-modal').style.display = 'none';
-}
+    window.closeShareModal = function() {
+      document.getElementById('share-modal').style.display = 'none';
+    };
   </script>
-<!-- シェア用モーダル -->
-<div id="share-modal" class="modal-overlay">
-  <div class="modal-content" style="text-align: center;">
-    <h2>画像を保存してシェア</h2>
-    <p style="font-size: 0.8rem; color: #aaa; margin-top: 8px;">
-      画像を長押し（または右クリック）して保存してください。
-    </p>
-    
-    <!-- Unityから渡された画像が入る場所 -->
-    <img id="share-img-preview" src="" alt="生成画像">
-
-    <br>
-    <a id="x-share-link" class="x-share-btn" href="#" target="_blank" rel="noopener noreferrer">
-      𝕏 でポストする
-    </a>
-
-    <button class="close-btn" onclick="closeShareModal()">閉じる</button>
-  </div>
-</div>
 </body>
 </html>
