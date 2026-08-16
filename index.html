@@ -251,12 +251,13 @@
   </div>
 
   <!-- Unity WebGL Loader Script -->
-  <script src="Build/BuildOutput.loader.js"></script>
+  <!-- Unity WebGL Loader Script -->
+  <script src="Build/BuildOutput2.loader.js"></script>
   <script>
     createUnityInstance(document.querySelector("#unity-canvas"), {
-      dataUrl: "Build/BuildOutput.data.unityweb",
-      frameworkUrl: "Build/BuildOutput.framework.js",
-      codeUrl: "Build/BuildOutput.wasm.unityweb",
+      dataUrl: "Build/BuildOutput2.data.unityweb",
+      frameworkUrl: "Build/BuildOutput2.framework.js.unityweb", // ★ここにも .unityweb を付けます
+      codeUrl: "Build/BuildOutput2.wasm.unityweb",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "DyingMessage",
