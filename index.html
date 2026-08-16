@@ -263,7 +263,7 @@
       alert(message);
     });
 
-    // モーダル操作用JavaScript
+// モーダル操作用JavaScript
     function openTerms() {
       document.getElementById('terms-modal').style.display = 'flex';
     }
@@ -273,20 +273,36 @@
 
     // Unityから呼び出せるようにグローバル(window)に関数を登録
     window.openShareModal = function(base64Image) {
-      const imgElement = document.getElementById('share-img-preview');
-      imgElement.src = base64Image;
+      // 1. Unity(WebGL)からのポインタを正しい文字列に変換
+      const imageSrc = (typeof UTF8ToString === 'function') ? UTF8ToString(base64Image) : base64Image;
 
+      // 2. <img>タグに画像データをセット
+      const imgElement = document.getElementById('share-img-preview');
+      if (imgElement) {
+        imgElement.src = imageSrc;
+      }
+
+      // 3. Xシェア用リンクを作成
       const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
       const shareUrl = encodeURIComponent(window.location.href);
       const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
       
-      document.getElementById('x-share-link').href = xUrl;
-      document.getElementById('share-modal').style.display = 'flex';
+      const xShareLink = document.getElementById('x-share-link');
+      if (xShareLink) {
+        xShareLink.href = xUrl;
+      }
+
+      // 4. モーダルを表示
+      const shareModal = document.getElementById('share-modal');
+      if (shareModal) {
+        shareModal.style.display = 'flex';
+      }
     };
 
     window.closeShareModal = function() {
       document.getElementById('share-modal').style.display = 'none';
     };
+    
     // エラーが発生したら画面上に赤文字でアラート表示する仕組み
 window.onerror = function(message, source, lineno, colno, error) {
   alert("エラーが発生しました:\n" + message);
