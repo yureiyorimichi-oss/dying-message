@@ -226,9 +226,11 @@
     </div>
   </div>
 
-  <!-- Unity WebGL Loader Script -->
+<!-- Unity WebGL Loader Script -->
   <script src="Build/BuildOutput2.loader.js"></script>
   <script>
+    let unityGame = null;
+
     createUnityInstance(document.querySelector("#unity-canvas"), {
       dataUrl: "Build/BuildOutput2.data.unityweb",
       frameworkUrl: "Build/BuildOutput2.framework.js.unityweb",
@@ -237,6 +239,8 @@
       companyName: "DefaultCompany",
       productName: "DyingMessage",
       productVersion: "1.0",
+    }).then((instance) => {
+      unityGame = instance;
     }).catch((message) => {
       alert(message);
     });
@@ -251,11 +255,24 @@
 
     // Unityから呼び出せるようにグローバル(window)に関数を登録
     window.openShareModal = function(base64Image) {
-      const imgElement = document.getElementById('share-img-preview');
-      if (imgElement) {
-        imgElement.src = base64Image;
+      let imageSrc = base64Image;
+
+      // 数値（メモリポインタ）で渡ってきた場合、Unityメモリから文字列へ変換
+      if (typeof base64Image === 'number') {
+        if (unityGame && unityGame.Module && typeof unityGame.Module.UTF8ToString === 'function') {
+          imageSrc = unityGame.Module.UTF8ToString(base64Image);
+        } else if (typeof UTF8ToString === 'function') {
+          imageSrc = UTF8ToString(base64Image);
+        }
       }
 
+      // <img>タグに画像（Base64）をセット
+      const imgElement = document.getElementById('share-img-preview');
+      if (imgElement) {
+        imgElement.src = imageSrc;
+      }
+
+      // Xシェア用リンクを作成
       const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
       const shareUrl = encodeURIComponent(window.location.href);
       const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
@@ -265,6 +282,7 @@
         xShareLink.href = xUrl;
       }
 
+      // モーダルを表示
       const shareModal = document.getElementById('share-modal');
       if (shareModal) {
         shareModal.style.display = 'flex';
