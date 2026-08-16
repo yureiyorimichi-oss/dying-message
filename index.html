@@ -153,6 +153,26 @@
       border-radius: 4px;
       cursor: pointer;
     }
+    /* シェア用モーダル */
+#share-img-preview {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #444;
+}
+.x-share-btn {
+  display: inline-block;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #333;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 10px;
+}
   </style>
 </head>
 <body>
@@ -226,7 +246,6 @@
 }).catch((message) => {
   alert(message);
 });
-
     // モーダル操作用JavaScript
     function openTerms() {
       document.getElementById('terms-modal').style.display = 'flex';
@@ -234,6 +253,45 @@
     function closeTerms() {
       document.getElementById('terms-modal').style.display = 'none';
     }
+    // Unityから画像をBase64形式で受け取ってモーダルを開く関数
+function openShareModal(base64Image) {
+  // 画像のセット
+  const imgElement = document.getElementById('share-img-preview');
+  imgElement.src = base64Image;
+
+  // X（Twitter）のシェアURL設定
+  const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
+  const shareUrl = encodeURIComponent(window.location.href);
+  const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
+  
+  document.getElementById('x-share-link').href = xUrl;
+
+  // モーダル表示
+  document.getElementById('share-modal').style.display = 'flex';
+}
+
+function closeShareModal() {
+  document.getElementById('share-modal').style.display = 'none';
+}
   </script>
+<!-- シェア用モーダル -->
+<div id="share-modal" class="modal-overlay">
+  <div class="modal-content" style="text-align: center;">
+    <h2>画像を保存してシェア</h2>
+    <p style="font-size: 0.8rem; color: #aaa; margin-top: 8px;">
+      画像を長押し（または右クリック）して保存してください。
+    </p>
+    
+    <!-- Unityから渡された画像が入る場所 -->
+    <img id="share-img-preview" src="" alt="生成画像">
+
+    <br>
+    <a id="x-share-link" class="x-share-btn" href="#" target="_blank" rel="noopener noreferrer">
+      𝕏 でポストする
+    </a>
+
+    <button class="close-btn" onclick="closeShareModal()">閉じる</button>
+  </div>
+</div>
 </body>
 </html>
