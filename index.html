@@ -289,6 +289,24 @@
     window.closeShareModal = function() {
       document.getElementById('share-modal').style.display = 'none';
     };
+    // エラーが発生したら画面上に赤文字でアラート表示する仕組み
+window.onerror = function(message, source, lineno, colno, error) {
+  alert("エラーが発生しました:\n" + message);
+};
+
+// Unityから直接呼び出して連携チェックをする関数
+window.openShareModal = function(base64Image) {
+  alert("openShareModalが呼ばれました！"); // 呼び出し成功チェック
+  const imgElement = document.getElementById('share-img-preview');
+  imgElement.src = base64Image;
+
+  const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
+  const shareUrl = encodeURIComponent(window.location.href);
+  const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
+  
+  document.getElementById('x-share-link').href = xUrl;
+  document.getElementById('share-modal').style.display = 'flex';
+};
   </script>
 </body>
 </html>
