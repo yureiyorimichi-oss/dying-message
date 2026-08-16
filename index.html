@@ -231,21 +231,23 @@
     </div>
   </div>
 
-<!-- モーダルダイアログの構造 -->
-<div id="share-modal" class="modal">
-  <div class="modal-content">
-    <h3>画像を保存してシェア</h3>
-    <p>画像を長押し（または右クリック）して保存してください。</p>
+<!-- シェア用モーダル -->
+  <div id="share-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="text-align: center;">
+      <h2>画像を保存してシェア</h2>
+      <p style="font-size: 0.8rem; color: #aaa; margin-top: 8px;">
+        画像を長押し（または右クリック）して保存してください。
+      </p>
 
-    <!-- ★ここに<img>タグがあるか確認（なければ追加） -->
-    <img id="share-image" src="" alt="ダイイングメッセージ" style="max-width: 100%; height: auto; margin: 15px 0; border-radius: 8px;">
+      <!-- ★ここに必要な<img>タグを追加しています -->
+      <img id="share-img-preview" src="" alt="ダイイングメッセージ" style="max-width: 100%; height: auto; margin: 15px 0; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;">
 
-    <div>
-      <button id="x-post-btn">𝕏 でポストする</button>
-      <button id="close-btn">閉じる</button>
+      <div style="margin-top: 15px;">
+        <a id="x-share-link" href="#" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; border-radius: 20px; font-weight: bold; margin-right: 10px;">𝕏 でポストする</a>
+        <button onclick="closeShareModal()" style="padding: 10px 20px; background-color: #8b0000; color: #fff; border: none; border-radius: 5px; cursor: pointer;">閉じる</button>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- Unity WebGL Loader Script -->
   <!-- Unity WebGL Loader Script -->
