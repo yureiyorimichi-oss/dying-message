@@ -275,23 +275,13 @@
 
     // Unityから呼び出せるようにグローバル(window)に関数を登録
     window.openShareModal = function(base64Image) {
-      // 1. 数値（ポインタ）で届いた場合は文字列に変換
-      let imageSrc = base64Image;
-      if (typeof base64Image === 'number') {
-        if (typeof UTF8ToString === 'function') {
-          imageSrc = UTF8ToString(base64Image);
-        } else if (typeof Module !== 'undefined' && typeof Module.UTF8ToString === 'function') {
-          imageSrc = Module.UTF8ToString(base64Image);
-        }
-      }
-
-      // 2. <img>タグに画像データをセット
+      // 1. <img>タグに画像（Base64文字列）をセット
       const imgElement = document.getElementById('share-img-preview');
       if (imgElement) {
-        imgElement.src = imageSrc;
+        imgElement.src = base64Image;
       }
 
-      // 3. Xシェア用リンクを作成
+      // 2. Xシェア用リンクを作成
       const shareText = encodeURIComponent("ダイイングメッセージを作成しました！\n#ダイイングメッセージメーカー");
       const shareUrl = encodeURIComponent(window.location.href);
       const xUrl = `https://x.com/intent/post?text=${shareText}&url=${shareUrl}`;
@@ -300,6 +290,13 @@
       if (xShareLink) {
         xShareLink.href = xUrl;
       }
+
+      // 3. モーダルを表示
+      const shareModal = document.getElementById('share-modal');
+      if (shareModal) {
+        shareModal.style.display = 'flex';
+      }
+    };
 
       // 4. モーダルを表示
       const shareModal = document.getElementById('share-modal');
