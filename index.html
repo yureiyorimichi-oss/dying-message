@@ -231,24 +231,21 @@
     </div>
   </div>
 
-  <!-- シェア用モーダル -->
-  <div id="share-modal" class="modal-overlay">
-    <div class="modal-content" style="text-align: center;">
-      <h2>画像を保存してシェア</h2>
-      <p style="font-size: 0.8rem; color: #aaa; margin-top: 8px;">
-        画像を長押し（または右クリック）して保存してください。
-      </p>
-      
-      <img id="share-img-preview" src="" alt="生成画像">
+<!-- モーダルダイアログの構造 -->
+<div id="share-modal" class="modal">
+  <div class="modal-content">
+    <h3>画像を保存してシェア</h3>
+    <p>画像を長押し（または右クリック）して保存してください。</p>
 
-      <br>
-      <a id="x-share-link" class="x-share-btn" href="#" target="_blank" rel="noopener noreferrer">
-        𝕏 でポストする
-      </a>
+    <!-- ★ここに<img>タグがあるか確認（なければ追加） -->
+    <img id="share-image" src="" alt="ダイイングメッセージ" style="max-width: 100%; height: auto; margin: 15px 0; border-radius: 8px;">
 
-      <button class="close-btn" onclick="closeShareModal()">閉じる</button>
+    <div>
+      <button id="x-post-btn">𝕏 でポストする</button>
+      <button id="close-btn">閉じる</button>
     </div>
   </div>
+</div>
 
   <!-- Unity WebGL Loader Script -->
   <!-- Unity WebGL Loader Script -->
